@@ -1,0 +1,7 @@
+# robots.txt — Globus International Marine Services
+# Update Sitemap URL once production domain is confirmed.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.globus-ims.com/sitemap.xml

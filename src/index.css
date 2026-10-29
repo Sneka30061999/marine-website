@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Google Inter font ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ════════════════════════════════════════════
+   BASE
+════════════════════════════════════════════ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Prevent horizontal overflow on 320 px devices */
+    overflow-x: hidden;
+  }
+  body {
+    @apply bg-white font-sans text-ink antialiased;
+    overflow-x: hidden;
+  }
+  /* Semantic heading hierarchy */
+  h1, h2, h3, h4 { @apply font-bold tracking-tight text-navy; }
+
+  /* Visible focus — WCAG 2.4.7 */
+  :focus-visible {
+    outline: 2px solid #38BDF8;
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  /* Remove focus ring for mouse users */
+  :focus:not(:focus-visible) { outline: none; }
+}
+
+/* ════════════════════════════════════════════
+   COMPONENTS
+════════════════════════════════════════════ */
+@layer components {
+
+  /* Layout container — max-width + horizontal padding.
+     px-4 = 16 px each side → safe at 320 px. */
+  .shell {
+    @apply mx-auto w-full max-w-shell px-4 md:px-8 xl:px-10;
+  }
+
+  /* Eyebrow label — short leading rule + uppercase tracking */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-semibold
+           uppercase tracking-[0.18em] text-ocean;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply block h-px w-5 rounded-full bg-current;
+  }
+
+  /* Section heading — 3 px ocean underline accent */
+  .sec-title          { @apply relative pb-4; }
+  .sec-title::after   {
+    content: '';
+    @apply absolute bottom-0 left-0 h-[3px] w-12 rounded-full bg-ocean;
+  }
+  .sec-title-center::after {
+    @apply left-1/2 -translate-x-1/2;
+  }
+
+  /* Cards — 4 px radius, thin border, restrained shadow */
+  .card { @apply rounded border border-line bg-white shadow-card; }
+
+  /* Form fields */
+  .field {
+    @apply w-full rounded border border-line bg-white px-3 py-2.5 text-sm
+           text-ink placeholder:text-slate-400
+           focus:border-ocean focus:outline-none focus:ring-2 focus:ring-sky/30;
+  }
+  .field[aria-invalid='true'] {
+    @apply border-red-500 focus:ring-red-200;
+  }
+
+  /* Icon badges — 4 px radius (Stitch spec) */
+  .icon-badge {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded
+           bg-ice text-ocean;
+  }
+  .icon-badge-navy {
+    @apply flex h-10 w-10 shrink-0 items-center justify-center rounded
+           bg-navy text-sky;
+  }
+
+  /* Skip-to-content link — sr-only until focused */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4
+           focus:z-[60] focus:rounded focus:bg-white focus:px-4 focus:py-2
+           focus:text-sm focus:font-semibold focus:text-navy focus:shadow-lift;
+  }
+}
+
+/* ════════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════════ */
+
+/* Wave drift — hero SVG artwork */
+@keyframes drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.wave-drift      { animation: drift 24s linear infinite; }
+.wave-drift-slow { animation: drift 40s linear infinite; }
+
+/* Hero staggered fade-up */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up   { animation: fadeUp 0.8s ease both; }
+.fade-up-2 { animation: fadeUp 0.8s 0.13s ease both; }
+.fade-up-3 { animation: fadeUp 0.8s 0.26s ease both; }
+.fade-up-4 { animation: fadeUp 0.8s 0.40s ease both; }
+
+/* Stats count-in */
+@keyframes countIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.count-in { animation: countIn 0.65s ease both; }
+
+/* ════════════════════════════════════════════
+   REDUCED-MOTION — respect user preference
+════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .wave-drift, .wave-drift-slow,
+  .fade-up, .fade-up-2, .fade-up-3, .fade-up-4,
+  .count-in {
+    animation: none;
+  }
+  html { scroll-behavior: auto; }
+}
