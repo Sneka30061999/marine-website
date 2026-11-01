@@ -31,6 +31,7 @@ export default function Ports() {
         title="Ports and locations we serve"
         text="Direct coverage across Indian ports, the Panama Canal corridor and an international partner network."
         bgImage={portsHeroImg}
+        bgPosition="center 50%"
       />
 
       {/* ══════════════════════════════════════════════════════

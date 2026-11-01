@@ -116,6 +116,7 @@ export default function Services() {
         title="Full service catalogue"
         text="Every service we provide is listed below — grouped by category, each with a direct enquiry link. Tell us your vessel, port and requirement."
         bgImage={servicesHeroImg}
+        bgPosition="center 60%"
       />
 
       {/* ── Quick-jump navigation — mobile-friendly ─────────── */}

@@ -11,7 +11,7 @@
  */
 import { Link } from 'react-router-dom'
 
-export default function PageHero({ eyebrow, title, text, crumb, bgImage }) {
+export default function PageHero({ eyebrow, title, text, crumb, bgImage, bgPosition = 'center 45%' }) {
   return (
     <section className="relative overflow-hidden bg-navy text-white">
 
@@ -25,7 +25,7 @@ export default function PageHero({ eyebrow, title, text, crumb, bgImage }) {
             fetchPriority="high"
             decoding="sync"
             className="h-full w-full object-cover"
-            style={{ objectPosition: 'center 45%' }}
+            style={{ objectPosition: bgPosition }}
           />
           {/* Gradient overlay — navy left → semi-transparent right so the
               image is visible on desktop while text stays legible */}
