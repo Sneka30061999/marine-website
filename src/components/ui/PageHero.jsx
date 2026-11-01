@@ -25,7 +25,7 @@ export default function PageHero({ eyebrow, title, text, crumb, bgImage }) {
             fetchPriority="high"
             decoding="sync"
             className="h-full w-full object-cover"
-            style={{ objectPosition: 'center 60%' }}
+            style={{ objectPosition: 'center 45%' }}
           />
           {/* Gradient overlay — navy left → semi-transparent right so the
               image is visible on desktop while text stays legible */}

@@ -38,7 +38,7 @@ export const site = {
       ],
       // Client-supplied — ⚠ confirm before launch
       phone: '+91 22 2284-SHIP',
-      whatsapp: '+91 ',  // same number — add WA link in UI
+      whatsapp: '+919841963059',
       // Two emails supplied; both shown. ⚠ Confirm sgp.supply address consistency.
       email: 'ops@globusmarine.com',
       emailAlt: 'quotes@globusmarine.com',

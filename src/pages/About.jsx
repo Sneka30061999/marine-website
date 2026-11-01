@@ -498,26 +498,6 @@ export default function About() {
         </section>
       )}
 
-      {/* ══════════════════════════════════════════════════
-          8. CTA BANNER
-      ══════════════════════════════════════════════════ */}
-      <section className="relative overflow-hidden bg-ocean py-14">
-        <span aria-hidden="true" className="absolute -left-16 -top-16 h-56 w-56 rounded-full bg-white/5" />
-        <span aria-hidden="true" className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-white/5" />
-        <div className="shell relative z-10 flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
-          <div>
-            <h2 className="text-2xl font-bold !text-white md:text-3xl">
-              Let's talk about your next port call.
-            </h2>
-            <p className="mt-2 text-sm text-white/80 md:text-base">
-              Contact our India or Panama office for a clear, itemised quote.
-            </p>
-          </div>
-          <Button to="/contact" variant="light" arrow className="shrink-0">
-            Request a Quote
-          </Button>
-        </div>
-      </section>
     </>
   )
 }
