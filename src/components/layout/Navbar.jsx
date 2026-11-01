@@ -48,8 +48,10 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Offset spacer — fixed header overlays content on ALL pages */}
-      <div className="h-[64px] md:h-[101px]" aria-hidden="true" />
+      {/* Offset spacer — matches fixed header height exactly:
+          mobile: main bar only (h-20 = 80px)
+          md+:    utility row (h-9 = 36px) + main bar (h-20 = 80px) = 116px */}
+      <div className="h-20 md:h-[116px]" aria-hidden="true" />
 
       <header
         role="banner"

@@ -504,7 +504,7 @@ export default function Home() {
         <HeroCarousel />
 
         {/* Grid */}
-        <div className="shell relative z-10 grid min-h-[82vh] items-center gap-8 py-24 md:py-28 xl:grid-cols-[1fr_400px]">
+        <div className="shell relative z-10 grid min-h-[82vh] items-center gap-8 py-12 md:py-16 xl:grid-cols-[1fr_400px]">
 
           {/* Left */}
           <div>

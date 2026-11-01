@@ -12,7 +12,7 @@
  */
 import { indianPorts, panamaPorts, internationalNetwork } from '../data/ports.js'
 import useMeta from '../hooks/useMeta.js'
-import portsHeroImg from '../assets/services-hero.jpg'
+import portsHeroImg from '../assets/ports-location-hero.jpg'
 import Icon from '../components/ui/Icon.jsx'
 import PageHero from '../components/ui/PageHero.jsx'
 
