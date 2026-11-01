@@ -1,8 +1,8 @@
 # Dependencies
 node_modules/
 
-# Build files
-dist/
+# # Build files
+# dist/
 
 # Kiro
 .agents/
