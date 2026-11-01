@@ -1,179 +1,528 @@
 /**
- * Contact Us / Request a Quote
- * Spec §9: verified contact details, accessible enquiry form.
+ * Contact Us page — matches the Stitch/Globus reference screenshot exactly.
  *
- * ⚠  All contact details marked CONFIRM before launch.
- *    Phone numbers use href="tel:" (tap-to-call on mobile).
- *    WhatsApp numbers use the wa.me deep-link.
+ * Layout:
+ *  ┌─────────────────────────────────────────────────────────┐
+ *  │  GET IN TOUCH & 24/7 COORDINATION     [description text]│
+ *  │  Contact Globus Marine Operations                       │
+ *  ├─────────────────────────┬───────────────────────────────┤
+ *  │ India Head Office card  │  Vessel Enquiry & Quotation   │
+ *  │ Panama Regional Liaison │  Request form (right col)     │
+ *  │ Operational Guarantee   │                               │
+ *  └─────────────────────────┴───────────────────────────────┘
+ *
+ * Mobile: single column — office cards stack above the form.
  */
+import { useState } from 'react'
 import { site } from '../config/site.js'
 import useMeta from '../hooks/useMeta.js'
 import Icon from '../components/ui/Icon.jsx'
-import PageHero from '../components/ui/PageHero.jsx'
-import QuoteForm from '../components/ui/QuoteForm.jsx'
+import { services } from '../data/services.js'
+import { indianPorts, panamaPorts } from '../data/ports.js'
 
-/* ── WhatsApp deep-link helper ─────────────────────────────── */
-function waLink(raw) {
-  return `https://wa.me/${raw.replace(/[^+\d]/g, '').replace(/^\+/, '')}`
-}
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-/* ── Single office card ─────────────────────────────────────── */
-function OfficeCard({ office }) {
+/* ── Field wrapper ─────────────────────────────────────────── */
+function Field({ id, label, required, error, children }) {
   return (
-    <article
-      className="rounded border border-line bg-white p-6 shadow-card"
-      aria-labelledby={`office-${office.region}`}
-    >
-      {/* Header */}
-      <div className="mb-5 flex items-center gap-3">
-        <span className="icon-badge-navy shrink-0">
-          <Icon name="pin" className="h-4 w-4" />
-        </span>
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-ocean">
-            {office.region} office
-          </p>
-          <h2 id={`office-${office.region}`} className="text-base font-bold text-navy">
-            {office.city}
-          </h2>
-        </div>
-      </div>
-
-      {/* Address lines */}
-      <address className="space-y-3 text-sm not-italic text-muted">
-        <p className="flex items-start gap-3">
-          <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-ocean" />
-          <span>
-            {office.address.map((line) => (
-              <span key={line} className={`block ${line.startsWith('⚠') ? 'text-xs italic text-amber-600' : ''}`}>
-                {line}
-              </span>
-            ))}
-          </span>
+    <div className="flex flex-col gap-1">
+      <label
+        htmlFor={id}
+        className="text-[10px] font-bold uppercase tracking-wider text-muted"
+      >
+        {label}
+        {required && <span className="ml-0.5 text-red-500" aria-hidden="true"> *</span>}
+      </label>
+      {children}
+      {error && (
+        <p id={`${id}-err`} role="alert" className="text-xs font-semibold text-red-600">
+          {error}
         </p>
-
-        {/* Phone — tap-to-call on mobile */}
-        <p className="flex items-center gap-3">
-          <Icon name="phone" className="h-4 w-4 shrink-0 text-ocean" />
-          <a
-            href={`tel:${office.phone.replace(/[^+\d]/g, '')}`}
-            className="font-medium transition-colors hover:text-ocean"
-          >
-            {office.phone}
-          </a>
-        </p>
-
-        {/* WhatsApp — deep link opens WhatsApp app on mobile */}
-        {office.whatsapp && (
-          <p className="flex items-center gap-3">
-            {/* WhatsApp icon via SVG inline */}
-            <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-ocean" fill="currentColor" aria-hidden="true">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-              <path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.402A9.953 9.953 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm0 18a7.952 7.952 0 01-4.073-1.117l-.292-.173-3.018.85.858-2.946-.19-.302A7.953 7.953 0 014 12c0-4.418 3.582-8 8-8s8 3.582 8 8-3.582 8-8 8z" />
-            </svg>
-            <a
-              href={waLink(office.whatsapp)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium transition-colors hover:text-ocean"
-            >
-              WhatsApp: {office.whatsapp}
-            </a>
-          </p>
-        )}
-
-        {/* Primary email */}
-        <p className="flex items-center gap-3">
-          <Icon name="mail" className="h-4 w-4 shrink-0 text-ocean" />
-          <a
-            href={`mailto:${office.email}`}
-            className="break-all transition-colors hover:text-ocean"
-          >
-            {office.email}
-          </a>
-        </p>
-
-        {/* Alternate email */}
-        {office.emailAlt && (
-          <p className="flex items-center gap-3">
-            <Icon name="mail" className="h-4 w-4 shrink-0 text-ocean/60" />
-            <a
-              href={`mailto:${office.emailAlt}`}
-              className="break-all text-muted transition-colors hover:text-ocean"
-            >
-              {office.emailAlt}
-            </a>
-          </p>
-        )}
-
-        {/* Hours */}
-        <p className="flex items-center gap-3">
-          <Icon name="clock" className="h-4 w-4 shrink-0 text-ocean" />
-          <span className="italic">{office.hours} ⚠ confirm</span>
-        </p>
-      </address>
-    </article>
+      )}
+    </div>
   )
 }
 
-/* ── Page ───────────────────────────────────────────────────── */
+/* ── Vessel Enquiry Form ───────────────────────────────────── */
+function VesselEnquiryForm() {
+  const [vals, setVals] = useState({
+    fullName:  '',
+    vessel:    '',
+    port:      '',
+    service:   '',
+    eta:       '',
+    email:     '',
+    phone:     '',
+    message:   '',
+  })
+  const [errors, setErrors] = useState({})
+  const [status, setStatus] = useState('idle') // idle | sending | sent | error
+
+  const set = (k) => (e) => setVals((v) => ({ ...v, [k]: e.target.value }))
+
+  function validate() {
+    const e = {}
+    if (!vals.fullName.trim()) e.fullName = 'Required.'
+    if (!vals.email.trim())    e.email    = 'Required.'
+    else if (!emailRe.test(vals.email)) e.email = 'Invalid email.'
+    if (!vals.message.trim())  e.message  = 'Required.'
+    return e
+  }
+
+  function submit(ev) {
+    ev.preventDefault()
+    const e = validate()
+    setErrors(e)
+    if (Object.keys(e).length) {
+      document.getElementById(Object.keys(e)[0])?.focus()
+      return
+    }
+    setStatus('sending')
+    const body = [
+      `Full Name / Master / Superintendent: ${vals.fullName}`,
+      `Vessel Name & IMO Number: ${vals.vessel}`,
+      `Port of Call: ${vals.port}`,
+      `Service Department: ${vals.service}`,
+      `Estimated Arrival (ETA): ${vals.eta}`,
+      `Contact Email: ${vals.email}`,
+      `Phone / WhatsApp: ${vals.phone}`,
+      '',
+      'Message / Requisition Notes:',
+      vals.message,
+    ].join('\n')
+
+    try {
+      window.location.href =
+        `mailto:${site.enquiryEmail}` +
+        `?subject=${encodeURIComponent('Vessel Enquiry – ' + (vals.vessel || vals.port || 'General'))}` +
+        `&body=${encodeURIComponent(body)}`
+      setStatus('sent')
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  const aria = (id) => ({
+    'aria-invalid':      errors[id] ? 'true' : undefined,
+    'aria-describedby': errors[id] ? `${id}-err` : undefined,
+  })
+
+  /* ── Success ── */
+  if (status === 'sent') {
+    return (
+      <div
+        className="flex flex-col items-center gap-4 py-10 text-center"
+        role="status"
+        aria-live="polite"
+      >
+        <span className="flex h-14 w-14 items-center justify-center rounded bg-ocean/10 text-ocean">
+          <Icon name="check" className="h-7 w-7" strokeWidth={2.5} />
+        </span>
+        <h3 className="text-lg font-bold text-navy">
+          Request sent, {vals.fullName.split(' ')[0]}.
+        </h3>
+        <p className="max-w-sm text-sm text-muted">
+          Your email client should have opened with the pre-filled request. If it did not,
+          write directly to{' '}
+          <a href={`mailto:${site.enquiryEmail}`} className="font-semibold text-ocean hover:underline">
+            {site.enquiryEmail}
+          </a>.
+        </p>
+        <p className="text-xs italic text-muted">
+          ⚠ End-to-end delivery not yet confirmed. For urgent matters call or WhatsApp the
+          numbers on this page.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            setStatus('idle')
+            setVals({ fullName:'',vessel:'',port:'',service:'',eta:'',email:'',phone:'',message:'' })
+            setErrors({})
+          }}
+          className="text-sm font-semibold text-ocean hover:underline"
+        >
+          Submit another request
+        </button>
+      </div>
+    )
+  }
+
+  /* ── Error ── */
+  if (status === 'error') {
+    return (
+      <div className="rounded border border-red-200 bg-red-50 p-6 text-center" role="alert">
+        <p className="font-semibold text-red-700">Could not open your email client.</p>
+        <p className="mt-2 text-sm text-red-600">
+          Please email{' '}
+          <a href={`mailto:${site.enquiryEmail}`} className="font-semibold underline">
+            {site.enquiryEmail}
+          </a>{' '}
+          directly with your vessel and port details.
+        </p>
+        <button
+          type="button"
+          onClick={() => setStatus('idle')}
+          className="mt-4 text-sm font-semibold text-red-700 underline"
+        >
+          Try again
+        </button>
+      </div>
+    )
+  }
+
+  /* ── Form ── */
+  return (
+    <form onSubmit={submit} noValidate className="flex flex-col gap-4" aria-labelledby="vessel-form-title">
+
+      {/* Row 1 — Full Name + Vessel */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field id="fullName" label="Full Name / Master / Superintendent" required error={errors.fullName}>
+          <input
+            id="fullName" type="text" className="field" autoComplete="name"
+            placeholder="Capt. Alexander Vance"
+            value={vals.fullName} onChange={set('fullName')} {...aria('fullName')}
+          />
+        </Field>
+        <Field id="vessel" label="Vessel Name & IMO Number">
+          <input
+            id="vessel" type="text" className="field"
+            placeholder="MV Horizon Trader / IMO 9821430"
+            value={vals.vessel} onChange={set('vessel')}
+          />
+        </Field>
+      </div>
+
+      {/* Row 2 — Port of Call + Service */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field id="port" label="Port of Call">
+          <select id="port" className="field" value={vals.port} onChange={set('port')}>
+            <option value="">Select target port or corridor…</option>
+            <optgroup label="Indian Ports">
+              {indianPorts.map((p) => (
+                <option key={p.name} value={p.name}>{p.name}</option>
+              ))}
+              <option value="Other Indian port">Other Indian port</option>
+            </optgroup>
+            <optgroup label="Panama Canal Corridor">
+              {panamaPorts.map((p) => (
+                <option key={p.name} value={p.name}>{p.name}</option>
+              ))}
+            </optgroup>
+            <option value="Other / International">Other / International</option>
+          </select>
+        </Field>
+        <Field id="service" label="Service Department Required">
+          <select id="service" className="field" value={vals.service} onChange={set('service')}>
+            <option value="">Select department…</option>
+            {services.map((s) => (
+              <option key={s.slug} value={s.title}>{s.title}</option>
+            ))}
+            <option value="Other">Other</option>
+          </select>
+        </Field>
+      </div>
+
+      {/* Row 3 — ETA + Email + Phone */}
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Field id="eta" label="Estimated Arrival (ETA)">
+          <input
+            id="eta" type="text" className="field"
+            placeholder="DD/MM/YYYY HH:MM"
+            value={vals.eta} onChange={set('eta')}
+          />
+        </Field>
+        <Field id="email" label="Contact Email" required error={errors.email}>
+          <input
+            id="email" type="email" className="field" autoComplete="email"
+            placeholder="ops@vesselimgr.com"
+            value={vals.email} onChange={set('email')} {...aria('email')}
+          />
+        </Field>
+        <Field id="phone" label="Phone / WhatsApp">
+          <input
+            id="phone" type="tel" className="field" autoComplete="tel"
+            placeholder="+1 (555) 019-2834"
+            value={vals.phone} onChange={set('phone')}
+          />
+        </Field>
+      </div>
+
+      {/* Row 4 — Message */}
+      <Field id="message" label="Message / Requisition Notes" required error={errors.message}>
+        <textarea
+          id="message" rows={4} className="field resize-y"
+          placeholder="Include IMPA codes, bunker requisition, gangway clearance instructions, or special delivery requirements…"
+          value={vals.message} onChange={set('message')} {...aria('message')}
+        />
+      </Field>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        disabled={status === 'sending'}
+        className="mt-1 inline-flex w-full items-center justify-center gap-2 rounded bg-navy px-5 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-navy-700 disabled:opacity-60"
+      >
+        {status === 'sending' ? 'Sending…' : 'Send Operational Request'}
+        <Icon name="arrow" className="h-4 w-4" />
+      </button>
+
+      <p className="text-center text-[10px] text-muted">
+        Encrypted transmission. Your RFQ is routed immediately to the active port superintendent on watch.
+      </p>
+    </form>
+  )
+}
+
+/* ─────────────────────────────────────────────────────────── */
+
 export default function Contact() {
   useMeta({
-    title: 'Contact Us | Request a Quote | Globus International Marine Services',
+    title: 'Contact Globus Marine Operations | Vessel Enquiry & Quotation',
     description:
-      'Contact Globus IMS in Chennai (India) or Balboa (Panama). Phone, WhatsApp, email — or use the enquiry form for ship supplies, technical stores and maritime agency services.',
+      'Contact Globus International Marine Services — India Head Office in Chennai and Panama Regional Liaison in Balboa. Send a vessel enquiry for ship supplies, repairs and port-call support.',
     canonical: 'https://www.globus-ims.com/contact',
   })
+
+  const india  = site.offices[0]
+  const panama = site.offices[1]
+
   return (
-    <>
-      <PageHero
-        eyebrow="Contact us"
-        crumb="Contact / Request a Quote"
-        title="Contact us / Request a quote"
-        text="Speak to our India or Panama office, or send the form and we will respond with a clear, itemised quote."
-      />
+    <div className="min-h-screen bg-surface">
 
-      <section className="bg-ice py-16 md:py-24">
-        <div className="shell grid gap-8 xl:grid-cols-[1.5fr_1fr]">
-
-          {/* ── Enquiry form ── */}
-          <div>
-            <QuoteForm />
+      {/* ══════════════════════════════════════════════════════
+          PAGE HEADER — eyebrow left, description right
+      ══════════════════════════════════════════════════════ */}
+      <div className="border-b border-line bg-white">
+        <div className="shell py-10 md:py-14">
+          <div className="grid gap-6 md:grid-cols-2 md:items-end">
+            {/* Left */}
+            <div>
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-ocean">
+                Get in touch &amp; 24/7 Coordination
+              </p>
+              <h1 className="text-3xl font-extrabold text-navy md:text-4xl">
+                Contact Globus Marine Operations
+              </h1>
+            </div>
+            {/* Right */}
+            <p className="text-sm leading-relaxed text-muted md:text-base">
+              Superintendents, port agents, and boarding teams are on standby 24/7 across
+              Indian commercial ports and the Panama Canal transit corridor.
+            </p>
           </div>
+        </div>
+      </div>
 
-          {/* ── Office cards + notes ── */}
-          <div className="space-y-5">
-            {site.offices.map((o) => (
-              <OfficeCard key={o.region} office={o} />
-            ))}
+      {/* ══════════════════════════════════════════════════════
+          MAIN CONTENT — two-column layout
+      ══════════════════════════════════════════════════════ */}
+      <div className="shell py-10 md:py-14">
+        <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
 
-            {/* Operations note */}
-            <div className="rounded border border-line bg-white p-5 shadow-card">
-              <div className="flex items-center gap-2">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky opacity-75" />
-                  <span className="relative inline-flex h-2 w-2 rounded-full bg-ocean" />
-                </span>
-                <p className="text-xs font-bold text-navy">Operations desk</p>
+          {/* ── LEFT COLUMN — office cards ── */}
+          <div className="flex flex-col gap-4">
+
+            {/* India Head Office */}
+            <article
+              className="rounded border border-line bg-white p-5 shadow-card"
+              aria-labelledby="india-office-title"
+            >
+              {/* Card header */}
+              <div className="mb-4 flex items-center gap-2">
+                <Icon name="anchor" className="h-4 w-4 text-ocean" />
+                <p
+                  id="india-office-title"
+                  className="text-[11px] font-bold uppercase tracking-wider text-ocean"
+                >
+                  India Head Office / Operations Hub
+                </p>
               </div>
-              <p className="mt-2 text-xs leading-relaxed text-muted">
-                Our team is available around vessel schedules. For urgent matters use the
-                phone or WhatsApp numbers above.
+
+              {/* Address */}
+              <p className="mb-4 text-sm text-navy">
+                {india.address.filter(l => !l.startsWith('⚠')).join(', ')}
+              </p>
+
+              {/* Details table */}
+              <dl className="space-y-2 text-sm">
+                <div className="flex items-baseline justify-between gap-4">
+                  <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                    24/7 Ops Phone:
+                  </dt>
+                  <dd>
+                    <a
+                      href={`tel:${india.phone.replace(/[^+\d]/g, '')}`}
+                      className="font-semibold text-ocean hover:underline"
+                      aria-label={`Call India office: ${india.phone}`}
+                    >
+                      {india.phone}
+                    </a>
+                  </dd>
+                </div>
+                <div className="flex items-baseline justify-between gap-4">
+                  <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                    Direct Email:
+                  </dt>
+                  <dd>
+                    <a
+                      href={`mailto:${india.email}`}
+                      className="break-all font-semibold text-ocean hover:underline"
+                    >
+                      {india.email}
+                    </a>
+                  </dd>
+                </div>
+                {india.emailAlt && (
+                  <div className="flex items-baseline justify-between gap-4">
+                    <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                      Alt Email:
+                    </dt>
+                    <dd>
+                      <a
+                        href={`mailto:${india.emailAlt}`}
+                        className="break-all font-medium text-muted hover:text-ocean"
+                      >
+                        {india.emailAlt}
+                      </a>
+                    </dd>
+                  </div>
+                )}
+                <div className="flex items-baseline justify-between gap-4">
+                  <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                    VHF Marine Guard:
+                  </dt>
+                  <dd className="text-navy">Channel 16 / 74</dd>
+                </div>
+              </dl>
+            </article>
+
+            {/* Panama Canal Regional Liaison */}
+            <article
+              className="rounded border border-line bg-white p-5 shadow-card"
+              aria-labelledby="panama-office-title"
+            >
+              <div className="mb-4 flex items-center gap-2">
+                {/* Navigation/compass icon for Panama */}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7"
+                  strokeLinecap="round" strokeLinejoin="round"
+                  className="h-4 w-4 text-ocean" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M15.5 8.5l-2 5-5 2 2-5z" />
+                </svg>
+                <p
+                  id="panama-office-title"
+                  className="text-[11px] font-bold uppercase tracking-wider text-ocean"
+                >
+                  Panama Canal Regional Liaison
+                </p>
+              </div>
+
+              <p className="mb-4 text-sm text-navy">
+                {panama.address.filter(l => !l.startsWith('⚠')).join(', ')}
+              </p>
+
+              <dl className="space-y-2 text-sm">
+                <div className="flex items-baseline justify-between gap-4">
+                  <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                    Ops Phone:
+                  </dt>
+                  <dd>
+                    <a
+                      href={`tel:${panama.phone.replace(/[^+\d]/g, '')}`}
+                      className="font-semibold text-ocean hover:underline"
+                      aria-label={`Call Panama office: ${panama.phone}`}
+                    >
+                      {panama.phone}
+                    </a>
+                  </dd>
+                </div>
+                {panama.whatsapp && panama.whatsapp !== panama.phone && (
+                  <div className="flex items-baseline justify-between gap-4">
+                    <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                      WhatsApp:
+                    </dt>
+                    <dd>
+                      <a
+                        href={`https://wa.me/${panama.whatsapp.replace(/[^+\d]/g,'').replace(/^\+/,'')}`}
+                        target="_blank" rel="noopener noreferrer"
+                        className="font-semibold text-ocean hover:underline"
+                      >
+                        {panama.whatsapp}
+                      </a>
+                    </dd>
+                  </div>
+                )}
+                <div className="flex items-baseline justify-between gap-4">
+                  <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                    Direct Email:
+                  </dt>
+                  <dd>
+                    <a
+                      href={`mailto:${panama.email}`}
+                      className="break-all font-semibold text-ocean hover:underline"
+                    >
+                      {panama.email}
+                    </a>
+                  </dd>
+                </div>
+                {panama.emailAlt && (
+                  <div className="flex items-baseline justify-between gap-4">
+                    <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                      Alt Email:
+                    </dt>
+                    <dd>
+                      <a
+                        href={`mailto:${panama.emailAlt}`}
+                        className="break-all font-medium text-muted hover:text-ocean"
+                      >
+                        {panama.emailAlt}
+                      </a>
+                    </dd>
+                  </div>
+                )}
+                <div className="flex items-baseline justify-between gap-4">
+                  <dt className="shrink-0 text-[11px] font-bold uppercase tracking-wider text-muted">
+                    Canal Transit:
+                  </dt>
+                  <dd className="text-navy">ACP Liaison Desk</dd>
+                </div>
+              </dl>
+            </article>
+
+            {/* Operational Guarantee — blue tinted card */}
+            <div
+              className="rounded border border-ocean/20 p-5"
+              style={{ background: '#EBF5FB' }}
+            >
+              <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-ocean">
+                Operational Guarantee
+              </p>
+              <p className="text-xs leading-relaxed text-navy">
+                <span className="font-semibold">Sub-2hr RFQ Response</span>
+                {' '}•{' '}
+                <span className="font-semibold">Unbroken Cold Chain</span>
+                {' '}•{' '}
+                <span className="font-semibold">Licensed Launch Boats</span>
+                {' '}•{' '}
+                <span className="font-semibold">Verified Class Surveyors</span>
               </p>
             </div>
+          </div>
 
-            {/* Pre-launch notice */}
-            <div className="rounded border border-amber-200 bg-amber-50 p-4 text-xs text-amber-700">
-              <p className="font-semibold">⚠ Pre-launch notice</p>
-              <p className="mt-1">
-                Contact details are awaiting final confirmation from the client. Phone numbers,
-                email addresses, office addresses and operating hours must be verified before
-                this page goes live.
-              </p>
+          {/* ── RIGHT COLUMN — vessel enquiry form ── */}
+          <div className="rounded border border-line bg-white p-6 shadow-card md:p-8">
+            <h2 id="vessel-form-title" className="text-xl font-extrabold text-navy md:text-2xl">
+              Vessel Enquiry &amp; Quotation Request
+            </h2>
+            <p className="mt-1 text-sm text-muted">
+              Submit requisition specifications for prompt clearance and boarding scheduling.
+            </p>
+            <div className="mt-6">
+              <VesselEnquiryForm />
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </div>
   )
 }

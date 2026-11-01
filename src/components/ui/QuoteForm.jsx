@@ -254,7 +254,7 @@ export default function QuoteForm() {
         {/* Phone / WhatsApp */}
         <Field
           id="phone" label="Phone / WhatsApp" required error={errors.phone}
-          hint="Include country code, e.g. +91 98419 63059"
+          hint="Include country code, e.g. +91 22 2284-SHIP"
         >
           <input
             id="phone" className="field" type="tel"

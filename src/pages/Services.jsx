@@ -6,11 +6,6 @@
  *   2. Technical & Engineering (4 services)
  *   3. Safety & Compliance (3 services)
  *   4. Agency & Other Support (2 services)
- *
- * Pre-launch notes visible in the data file (services.js):
- *   • Paints brand names need authorisation confirmation
- *   • Gas Refilling brand spelling needs confirmation
- *   • CTM abbreviation needs confirmation from client
  */
 import { Link } from 'react-router-dom'
 import useMeta from '../hooks/useMeta.js'
@@ -196,44 +191,6 @@ export default function Services() {
       />
 
       {/* ══════════════════════════════════════════════════════
-          PRE-LAUNCH NOTICES — visible until confirmed
-      ══════════════════════════════════════════════════════ */}
-      <section className="bg-amber-50 py-10 border-y border-amber-200">
-        <div className="shell">
-          <p className="text-xs font-bold uppercase tracking-widest text-amber-700">
-            ⚠ Pre-launch — items pending client confirmation
-          </p>
-          <ul className="mt-4 space-y-2 text-xs text-amber-700">
-            <li className="flex items-start gap-2">
-              <Icon name="check" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" strokeWidth={2} />
-              <span>
-                <strong>Paints (International & Hempel):</strong> Brand names retained as supplied.
-                Confirm the client is an authorised stockist or agent before publishing.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Icon name="check" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" strokeWidth={2} />
-              <span>
-                <strong>Gas Refilling (Drew/Unitor):</strong> "Drew" likely refers to Drew Marine;
-                "Unitor" is a Wilhelmsen brand. Confirm exact brand relationships and spelling before publishing.
-              </span>
-            </li>
-            <li className="flex items-start gap-2">
-              <Icon name="check" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" strokeWidth={2} />
-              <span>
-                <strong>CTM:</strong> Most likely "Cash to Master" in a ship-supply context, but could also
-                mean "Crew &amp; Technical Management". Confirm exact meaning with the client before expanding
-                the abbreviation in published copy.
-              </span>
-            </li>
-          </ul>
-          <p className="mt-4 text-xs text-amber-600 italic">
-            This notice is for internal review. Remove before going live.
-          </p>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════════════
           HOW IT WORKS — 4-step process
       ══════════════════════════════════════════════════════ */}
       <section className="bg-white py-16 md:py-20">
@@ -276,24 +233,7 @@ export default function Services() {
         </div>
       </section>
 
-      {/* CTA banner */}
-      <section className="relative overflow-hidden bg-ocean py-14">
-        <span aria-hidden="true" className="absolute -left-16 -top-16 h-56 w-56 rounded-full bg-white/5" />
-        <span aria-hidden="true" className="absolute -bottom-20 -right-20 h-64 w-64 rounded-full bg-white/5" />
-        <div className="shell relative z-10 flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
-          <div>
-            <h2 className="text-2xl font-bold !text-white md:text-3xl">
-              Don't see exactly what you need?
-            </h2>
-            <p className="mt-2 text-sm text-white/80 md:text-base">
-              Describe your requirement and we will advise the right solution.
-            </p>
-          </div>
-          <Button to="/contact" variant="light" arrow className="shrink-0">
-            Request a Quote
-          </Button>
-        </div>
-      </section>
+
     </>
   )
 }

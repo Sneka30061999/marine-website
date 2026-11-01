@@ -29,10 +29,11 @@ export default {
           dark:    '#066599',
         },
         sky:  { DEFAULT: '#38BDF8' },          // accent highlight
-        ice:  { DEFAULT: '#F0F4F8', 200: '#E2E9F1' }, // light section bg
-        line: '#CBD5E1',                       // thin slate border
-        ink:  '#0F2238',                       // body text
-        muted:'#51647A',                       // secondary text
+        ice:    { DEFAULT: '#F0F4F8', 200: '#E2E9F1' }, // light section bg
+        surface: { DEFAULT: '#F8F9FF' },                 // navbar main-row bg
+        line:   '#CBD5E1',                       // thin slate border
+        ink:    '#0F2238',                       // body text
+        muted:  '#51647A',                       // secondary text
       },
       fontFamily: {
         sans: ['Inter','ui-sans-serif','system-ui','Segoe UI','Roboto',

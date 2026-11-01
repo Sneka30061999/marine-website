@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Globus IMS logo mark">
-  <rect width="32" height="32" rx="6" fill="#071B33"/>
-  <!-- Anchor icon — matches site Logo component -->
-  <circle cx="16" cy="9" r="2.4" fill="none" stroke="#38BDF8" stroke-width="2"/>
-  <path d="M16 11.4V24M10 15.5h12M8 20c0 3.5 3.6 6 8 6s8-2.5 8-6"
-        fill="none" stroke="#38BDF8" stroke-width="2"
-        stroke-linecap="round" stroke-linejoin="round"/>
-</svg>

@@ -21,7 +21,7 @@ export const site = {
 
   // Primary enquiry destination — all forms submit here.
   // ⚠ CONFIRM before launch; currently set to India supply email.
-  enquiryEmail: 'supply@globus-ims.com',
+  enquiryEmail: 'quotes@globusmarine.com',
 
   // Set to a URL string once a privacy policy page exists, e.g. '/privacy'.
   // Leave as null to hide the footer privacy link.
@@ -33,16 +33,15 @@ export const site = {
       // ⚠ CONFIRM: exact registered address before publishing
       city: 'Chennai, India',
       address: [
-        'Globus International Marine Services (India)',
-        'Head Office: Chennai, India',
+        'Narima Point/Fort District,Mumbai,India',
         '⚠ Full address to be confirmed',
       ],
       // Client-supplied — ⚠ confirm before launch
-      phone: '+91 98419 63059',
-      whatsapp: '+91 98419 63059',  // same number — add WA link in UI
+      phone: '+91 22 2284-SHIP',
+      whatsapp: '+91 ',  // same number — add WA link in UI
       // Two emails supplied; both shown. ⚠ Confirm sgp.supply address consistency.
-      email: 'supply@globus-ims.com',
-      emailAlt: 'globus-ims@hotmail.com',
+      email: 'ops@globusmarine.com',
+      emailAlt: 'quotes@globusmarine.com',
       // ⚠ CONFIRM operating hours
       hours: 'Mon – Sat, 09:00 – 18:00 IST',
     },
@@ -51,11 +50,10 @@ export const site = {
       // ⚠ CONFIRM: exact branch address before publishing
       city: 'Balboa, Panama',
       address: [
-        'Globus International Marine Services',
-        'Balboa, Panama',
+        'Balboa Port Road,Building 39,Panama City,Rep of Panama',
         '⚠ Full address to be confirmed',
       ],
-      phone: '+507 6539 5306',
+      phone: '+507 833-PORT/+507 314-CANAL',
       whatsapp: '+507 6539 5306', // WhatsApp confirmed in brief
       // ⚠ CONFIRM: brief notes sgp.supply@ may be inconsistent — verify
       email: 'sgp.supply@globus-ims.com',
@@ -65,8 +63,31 @@ export const site = {
     },
   ],
 
-  // Only render when client supplies verified certificates.
-  certifications: [],
+  // Certifications — client-supplied (ISO 9001:2015, HACCP, ISO 14001:2015)
+  // Pics 3,4,5,7 removed as instructed; only 1, 2, 6 retained.
+  certifications: [
+    {
+      name: 'ISO 9001:2015',
+      issuer: 'Quality Management System',
+      year: '2015',
+      description: 'Certified Quality Management System for the supply of ship provisions, deck/engine stores and related marine services.',
+      color: 'ocean',
+    },
+    {
+      name: 'HACCP',
+      issuer: 'Hazard Analysis & Critical Control Point',
+      year: '',
+      description: 'HACCP certification for the supply of food/dry provisions and ship stores as per IAS/FIFS specifications at Indian ports.',
+      color: 'ocean',
+    },
+    {
+      name: 'ISO 14001:2015',
+      issuer: 'Environmental Management System',
+      year: '2015',
+      description: 'Certified Environmental Management System for the supply of fresh, dry and general marine provisions and ship stores.',
+      color: 'ocean',
+    },
+  ],
 
   // Mission / vision / values rendered ONLY when approved === true.
   statement: {

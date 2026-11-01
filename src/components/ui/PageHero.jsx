@@ -1,18 +1,17 @@
 /**
- * PageHero — shared inner-page hero section
- *
- * §10: one clear H1 per page, breadcrumb nav, semantic structure
- * §12: readable contrast (white on navy), no autoplay/animation
+ * PageHero — inner-page hero (About, Services, Ports, Contact)
+ * Matches the Stitch design: dark navy bg, breadcrumb, H1, ocean rule.
+ * §10: semantic breadcrumb nav, single H1, descriptive alt on any bg image.
  */
 import { Link } from 'react-router-dom'
 
 export default function PageHero({ eyebrow, title, text, crumb }) {
   return (
     <section className="relative overflow-hidden bg-navy text-white">
-      {/* Decorative grid — aria-hidden, decorative */}
+      {/* Subtle chart grid — decorative */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.055]"
+        className="pointer-events-none absolute inset-0 opacity-[0.05]"
         style={{
           backgroundImage:
             'linear-gradient(#38BDF8 1px,transparent 1px),' +
@@ -20,12 +19,12 @@ export default function PageHero({ eyebrow, title, text, crumb }) {
           backgroundSize: '48px 48px',
         }}
       />
-      {/* Atmospheric glow — decorative */}
+      {/* Glow — decorative */}
       <span aria-hidden="true"
-        className="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-ocean/20 blur-3xl" />
+        className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-ocean/20 blur-3xl" />
 
       <div className="shell relative py-14 md:py-20">
-        {/* Breadcrumb navigation — §10 semantic nav */}
+        {/* Breadcrumb */}
         <nav aria-label="Breadcrumb">
           <ol className="flex items-center gap-1 text-xs text-slate-400">
             <li>
@@ -40,7 +39,6 @@ export default function PageHero({ eyebrow, title, text, crumb }) {
 
         <p className="eyebrow mt-6 !text-sky">{eyebrow}</p>
 
-        {/* H1 — one per page (§11) */}
         <h1 className="mt-3 max-w-3xl text-4xl font-extrabold leading-tight !text-white md:text-5xl">
           {title}
         </h1>
