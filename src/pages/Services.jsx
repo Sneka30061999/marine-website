@@ -9,6 +9,7 @@
  */
 import { Link } from 'react-router-dom'
 import useMeta from '../hooks/useMeta.js'
+import servicesHeroImg from '../assets/services-hero.jpg'
 import {
   supplyServices,
   technicalServices,
@@ -114,6 +115,7 @@ export default function Services() {
         eyebrow="Services"
         title="Full service catalogue"
         text="Every service we provide is listed below — grouped by category, each with a direct enquiry link. Tell us your vessel, port and requirement."
+        bgImage={servicesHeroImg}
       />
 
       {/* ── Quick-jump navigation — mobile-friendly ─────────── */}

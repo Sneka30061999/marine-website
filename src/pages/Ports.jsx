@@ -12,6 +12,7 @@
  */
 import { indianPorts, panamaPorts, internationalNetwork } from '../data/ports.js'
 import useMeta from '../hooks/useMeta.js'
+import portsHeroImg from '../assets/ports-hero.jpg'
 import Icon from '../components/ui/Icon.jsx'
 import PageHero from '../components/ui/PageHero.jsx'
 
@@ -29,6 +30,7 @@ export default function Ports() {
         eyebrow="Ports & locations"
         title="Ports and locations we serve"
         text="Direct coverage across Indian ports, the Panama Canal corridor and an international partner network."
+        bgImage={portsHeroImg}
       />
 
       {/* ══════════════════════════════════════════════════════
